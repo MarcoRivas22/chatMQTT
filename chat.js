@@ -1,6 +1,7 @@
 const userName = document.getElementById("userName");
 const chatWindow = document.getElementById("chatWindow");
 const messageInput = document.getElementById("messageInput");
+const sendButton = document.getElementById("sendButton");
 
 const clientId = "clientEMQX" + Math.random().toString(36).substr(2, 5);
 
@@ -52,6 +53,16 @@ client.on("message", function (topic, message) {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 });
 
+const sendMessage = () => {
+  const message = {
+    name: userName.value,
+    msg: messageInput.value,
+  };
+
+  client.publish("chat", JSON.stringify(message));
+  messageInput.value = "";
+};
+
 messageInput.addEventListener("keyup", (event) => {
   if (event.keyCode === 13) {
     if (userName.value == "") {
@@ -63,20 +74,4 @@ messageInput.addEventListener("keyup", (event) => {
   }
 });
 
-const sendMessage = () => {
-  const message = {
-    name: userName.value,
-    msg: messageInput.value,
-  };
-
-  client.publish("chat", JSON.stringify(message));
-  messageInput.value = "";
-};
-
-
-10, 14
-3, 8, 11
-1, 2, 4, 6, 5
-    4, 11
-    1, 2, 4, 6, 5,
-    
+sendButton.addEventListener("click", sendMessage);
